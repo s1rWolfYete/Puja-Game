@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0b0a16" />
+<title>PUJA CLUB — La subasta de tus ideas</title>
+<style>
+  :root{--bg:#0b0a16;--panel:#141326;--panel2:#1b1931;--line:rgba(255,255,255,.09);--text:#f6f3ff;--muted:#aaa6c2;--purple:#9474ff;--pink:#f47ac7;--lime:#c5ff72;--yellow:#ffd66b;--red:#ff727e;--shadow:0 24px 70px rgba(0,0,0,.34)}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(ellipse at 15% 0%,rgba(117,82,255,.17),transparent 35%),radial-gradient(ellipse at 90% 20%,rgba(244,122,199,.11),transparent 28%),var(--bg)}
+  button,input,select,textarea{font:inherit}
+  button{cursor:pointer}
+  .app{max-width:1250px;margin:auto;padding:24px 22px 55px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:38px}
+  .brand{display:flex;align-items:center;gap:12px;letter-spacing:.12em;font-weight:900;font-size:14px}
+  .brand-mark{width:39px;height:39px;border-radius:13px;background:linear-gradient(135deg,var(--purple),var(--pink));display:grid;place-items:center;font-size:20px;box-shadow:0 8px 25px rgba(148,116,255,.3)}
+  .brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:.2em;font-weight:700;margin-top:2px}
+  .top-actions{display:flex;gap:9px;align-items:center}
+  .eyebrow{color:var(--lime);font-size:10px;font-weight:900;letter-spacing:.2em;text-transform:uppercase}
+  h1,h2,h3,p{margin-top:0}
+  h1{font-size:clamp(38px,6vw,67px);line-height:.98;letter-spacing:-.065em;margin:13px 0 17px;font-weight:900}
+  h1 span{color:var(--lime)}
+  .lead{color:var(--muted);font-size:15px;line-height:1.7;max-width:650px}
+  .hero{margin-bottom:32px}
+  .panel{background:linear-gradient(145deg,rgba(28,26,51,.94),rgba(17,16,33,.96));border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:var(--shadow)}
+  .panel-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+  .panel-title h2,.panel-title h3{margin:0;font-size:16px;letter-spacing:-.02em}
+  .panel-title p{margin:5px 0 0;color:var(--muted);font-size:12px}
+  .setup-grid{display:grid;grid-template-columns:minmax(260px,.85fr) minmax(0,1.4fr);gap:18px;align-items:start}
+  .field{display:flex;flex-direction:column;gap:7px;margin-bottom:15px}
+  .field label{font-size:11px;color:#c9c4df;font-weight:800;letter-spacing:.07em;text-transform:uppercase}
+  .input,select,textarea{width:100%;color:var(--text);background:#0e0d1b;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 13px;outline:none;transition:.18s}
+  .input:focus,select:focus,textarea:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(148,116,255,.13)}
+  input[type=number]{font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace}
+  .player-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .money-field{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;max-width:240px}
+  .help{font-size:11px;color:var(--muted);line-height:1.5;margin:0}
+  .preset-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+  .preset{border:1px solid var(--line);background:#111022;color:var(--text);border-radius:15px;padding:13px 11px;text-align:left;min-height:94px;transition:.18s;position:relative;overflow:hidden}
+  .preset:hover{transform:translateY(-2px);border-color:rgba(148,116,255,.55)}
+  .preset.active{border-color:var(--lime);background:linear-gradient(145deg,rgba(197,255,114,.1),rgba(148,116,255,.1));box-shadow:inset 0 0 0 1px rgba(197,255,114,.12)}
+  .preset .emoji{font-size:22px;display:block;margin-bottom:9px}
+  .preset strong{display:block;font-size:11px;line-height:1.25}
+  .preset small{color:var(--muted);font-size:9px;display:block;margin-top:4px}
+  .editor-head{display:flex;justify-content:space-between;align-items:center;margin:19px 0 9px;gap:10px}
+  .editor-head label{font-size:11px;color:#c9c4df;font-weight:800;letter-spacing:.07em;text-transform:uppercase}
+  .editor-foot{display:flex;justify-content:space-between;gap:10px;margin-top:8px;align-items:center;flex-wrap:wrap}
+  .option-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;max-height:510px;overflow:auto;padding:2px 4px 2px 0}
+  .option-card{min-width:0;padding:11px;border:1px solid var(--line);border-radius:15px;background:rgba(8,7,19,.48)}
+  .option-card-top{display:flex;align-items:flex-start;gap:10px}
+  .option-thumb{width:62px;height:62px;flex:0 0 62px;border-radius:13px;position:relative;overflow:hidden;display:grid;place-items:center;background:linear-gradient(145deg,rgba(148,116,255,.2),rgba(244,122,199,.12));border:1px solid rgba(255,255,255,.1);font-size:29px}
+  .option-thumb img{width:100%;height:100%;object-fit:cover}
+  .option-thumb .thumb-emoji{position:absolute;right:3px;bottom:3px;min-width:23px;height:23px;padding:1px 4px;border-radius:8px;display:grid;place-items:center;background:rgba(11,10,22,.88);font-size:15px;border:1px solid rgba(255,255,255,.16)}
+  .option-fields{min-width:0;flex:1;display:grid;gap:7px}
+  .option-fields label{font-size:9px;color:var(--muted);font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+  .option-input{width:100%;min-width:0;color:var(--text);background:#0e0d1b;border:1px solid rgba(255,255,255,.1);border-radius:9px;padding:8px 9px;outline:none;font-size:11px}
+  .option-input:focus{border-color:var(--purple)}
+  .option-card-actions{display:flex;align-items:center;gap:7px;margin-top:9px;min-width:0}
+  .image-pick{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid rgba(148,116,255,.3);background:rgba(148,116,255,.1);color:#d9d0ff;border-radius:9px;padding:7px 9px;font-size:10px;font-weight:800;cursor:pointer}
+  .image-pick:hover{background:rgba(148,116,255,.18)}
+  .image-status{font-size:9px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+  .remove-option{margin-left:auto;border:1px solid rgba(255,114,126,.18);background:rgba(255,114,126,.08);color:#ff9ca4;border-radius:9px;padding:7px 8px;font-size:10px;font-weight:800;cursor:pointer}
+  .option-card-actions input[type=file]{display:none}
+  .item-icon{position:relative;overflow:hidden}
+  .item-icon img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .item-icon .emoji-layer{position:absolute;right:6px;bottom:6px;min-width:34px;height:34px;padding:2px 5px;display:grid;place-items:center;border-radius:11px;background:rgba(11,10,22,.86);border:1px solid rgba(255,255,255,.22);font-size:22px;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+  .count{font-size:11px;color:var(--muted);font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace}
+  .btn{border:0;border-radius:12px;padding:12px 16px;font-weight:900;font-size:12px;color:#151126;background:var(--lime);transition:.18s;box-shadow:0 7px 20px rgba(197,255,114,.12)}
+  .btn:hover{transform:translateY(-1px);filter:brightness(1.04)}
+  .btn:disabled{opacity:.35;cursor:not-allowed;transform:none;filter:none}
+  .btn.secondary{background:#282541;color:var(--text);border:1px solid var(--line);box-shadow:none}
+  .btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line);box-shadow:none}
+  .btn.purple{background:var(--purple);color:white}
+  .btn.pink{background:var(--pink);color:#241127}
+  .btn.danger{background:rgba(255,114,126,.14);color:#ff9ca4;border:1px solid rgba(255,114,126,.25);box-shadow:none}
+  .btn.big{padding:16px 23px;font-size:13px;border-radius:14px}
+  .start-row{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:17px;flex-wrap:wrap}
+  .start-row .help{max-width:420px}
+  .rules-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+  .rule{padding:13px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid var(--line)}
+  .rule b{font-size:11px;display:block;margin-bottom:5px}
+  .rule span{font-size:10px;color:var(--muted);line-height:1.5;display:block}
+  .hidden{display:none!important}
+  /* Game */
+  .game-head{display:flex;align-items:flex-end;justify-content:space-between;gap:15px;margin:5px 0 20px;flex-wrap:wrap}
+  .game-head h1{font-size:clamp(30px,4vw,45px);margin:8px 0 7px}
+  .game-head p{font-size:12px;color:var(--muted);margin:0}
+  .game-tools{display:flex;gap:8px;flex-wrap:wrap}
+  .scoreboard{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:16px}
+  .player-card{padding:17px 19px;border-radius:18px;background:var(--panel);border:1px solid var(--line);position:relative;overflow:hidden}
+  .player-card.active{border-color:rgba(197,255,114,.7);box-shadow:inset 0 0 0 1px rgba(197,255,114,.15)}
+  .player-card.active:after{content:'EN TURNO';position:absolute;right:14px;top:13px;font-size:8px;color:var(--lime);letter-spacing:.14em;font-weight:900}
+  .player-top{display:flex;justify-content:space-between;gap:12px;align-items:center}
+  .player-name{font-size:13px;font-weight:900;max-width:65%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .player-money{font:500 25px 'SFMono-Regular',Consolas,'Liberation Mono',monospace;color:var(--lime);margin:12px 0 8px;letter-spacing:-.06em}
+  .player-money.zero{color:var(--red)}
+  .bar{height:5px;background:#302d49;border-radius:99px;overflow:hidden}
+  .bar>i{height:100%;display:block;background:linear-gradient(90deg,var(--purple),var(--lime));border-radius:99px;transition:width .3s}
+  .player-items{color:var(--muted);font-size:10px;margin-top:9px;line-height:1.5}
+  .arena{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(245px,.75fr);gap:16px;align-items:stretch}
+  .auction-card{padding:24px;min-height:435px;display:flex;flex-direction:column;position:relative;overflow:hidden}
+  .auction-card:before{content:'';position:absolute;width:330px;height:330px;border-radius:50%;background:radial-gradient(circle,rgba(148,116,255,.14),transparent 70%);top:-160px;right:-100px;pointer-events:none}
+  .roundline{display:flex;justify-content:space-between;gap:12px;align-items:center;position:relative;z-index:1}
+  .round-tag{font-size:10px;letter-spacing:.14em;color:var(--muted);font-weight:900}
+  .pill{padding:7px 10px;border:1px solid var(--line);border-radius:99px;color:var(--muted);font-size:9px;letter-spacing:.1em;font-weight:900;text-transform:uppercase}
+  .item-showcase{position:relative;z-index:1;text-align:center;padding:27px 12px 21px;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .item-icon{width:112px;height:112px;border-radius:30px;background:linear-gradient(145deg,rgba(148,116,255,.2),rgba(244,122,199,.12));border:1px solid rgba(255,255,255,.1);display:grid;place-items:center;font-size:57px;box-shadow:0 15px 40px rgba(0,0,0,.22);margin-bottom:19px}
+  .item-showcase h2{font-size:clamp(23px,3vw,33px);letter-spacing:-.05em;margin:0 0 9px;max-width:600px}
+  .item-showcase p{color:var(--muted);font-size:12px;line-height:1.6;max-width:470px;margin:0}
+  .bid-display{display:flex;justify-content:center;align-items:center;gap:10px;margin:4px 0 18px;position:relative;z-index:1}
+  .bid-display .amount{font:500 38px 'SFMono-Regular',Consolas,'Liberation Mono',monospace;color:var(--lime);letter-spacing:-.07em}
+  .bid-display .bid-label{color:var(--muted);font-size:9px;line-height:1.4;text-transform:uppercase;letter-spacing:.12em;font-weight:900}
+  .statusline{min-height:43px;border-radius:12px;background:rgba(148,116,255,.1);border:1px solid rgba(148,116,255,.16);display:flex;align-items:center;justify-content:center;text-align:center;padding:10px 12px;color:#d9d0ff;font-size:11px;font-weight:800;margin-bottom:13px;position:relative;z-index:1}
+  .statusline.good{background:rgba(197,255,114,.08);border-color:rgba(197,255,114,.2);color:var(--lime)}
+  .statusline.warn{background:rgba(255,214,107,.08);border-color:rgba(255,214,107,.2);color:var(--yellow)}
+  .actions{position:relative;z-index:1;display:flex;justify-content:center;gap:9px;flex-wrap:wrap}
+  .action-main{min-width:180px}
+  .amount-row{display:flex;justify-content:center;align-items:center;gap:8px;margin:-3px 0 11px}
+  .amount-row label{font-size:10px;color:var(--muted);font-weight:800}
+  .amount-input{width:88px;padding:9px 10px;background:#0d0c19;border:1px solid var(--line);border-radius:10px;color:var(--text);font:500 14px 'SFMono-Regular',Consolas,'Liberation Mono',monospace;text-align:center}
+  .side-stack{display:flex;flex-direction:column;gap:15px}
+  .side-panel{padding:18px;min-height:0}
+  .side-panel h3{font-size:12px;margin:0 0 13px}
+  .ownership-list{display:grid;gap:12px}
+  .owner-block{padding:11px;border-radius:12px;background:rgba(255,255,255,.035)}
+  .owner-label{font-size:10px;font-weight:900;margin-bottom:7px;display:flex;justify-content:space-between;gap:10px}
+  .owner-label span:last-child{font:10px 'SFMono-Regular',Consolas,'Liberation Mono',monospace;color:var(--muted)}
+  .owned{font-size:10px;color:var(--muted);line-height:1.6;max-height:105px;overflow:auto}
+  .empty{color:#77728f;font-style:italic}
+  .log{max-height:192px;overflow:auto;display:flex;flex-direction:column;gap:9px}
+  .log-entry{border-left:2px solid rgba(148,116,255,.6);padding-left:9px;font-size:10px;color:var(--muted);line-height:1.45}
+  .log-entry b{color:var(--text)}
+  .log-entry.latest{border-left-color:var(--lime)}
+  .disclaimer{text-align:center;color:#706b88;font-size:9px;margin:20px 0 0;line-height:1.6}
+  /* end screen */
+  .end-panel{text-align:center;padding:37px 24px}
+  .trophy{font-size:55px;margin-bottom:10px}
+  .end-panel h2{font-size:clamp(28px,5vw,43px);letter-spacing:-.06em;margin:7px 0}
+  .end-panel>p{color:var(--muted);font-size:12px;line-height:1.6}
+  .final-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:left;margin:24px 0}
+  .final-player{padding:16px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.03)}
+  .final-player h3{font-size:13px;margin-bottom:7px}
+  .final-player .final-money{font:500 20px 'SFMono-Regular',Consolas,'Liberation Mono',monospace;color:var(--lime)}
+  .final-items{font-size:10px;color:var(--muted);line-height:1.7;margin-top:9px}
+  .vote-area{padding:17px;border:1px solid rgba(197,255,114,.2);background:rgba(197,255,114,.045);border-radius:16px}
+  .vote-area h3{font-size:13px;margin-bottom:6px}
+  .vote-area p{font-size:10px;color:var(--muted);margin-bottom:12px}
+  .vote-buttons{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .winner{margin-top:15px;color:var(--lime);font-weight:900;font-size:15px}
+  /* modal */
+  .modal-backdrop{position:fixed;inset:0;background:rgba(5,4,13,.78);backdrop-filter:blur(8px);display:grid;place-items:center;padding:18px;z-index:30}
+  .modal{width:min(480px,100%);padding:23px;background:#17152b;border:1px solid var(--line);border-radius:20px;box-shadow:0 30px 100px rgba(0,0,0,.55)}
+  .modal h2{font-size:20px;margin:0 0 7px;letter-spacing:-.04em}
+  .modal>p{color:var(--muted);font-size:11px;line-height:1.6}
+  .modal-actions{display:grid;gap:8px;margin-top:17px}
+  .close-row{display:flex;justify-content:flex-end;margin-top:12px}
+  .mini-badge{display:inline-flex;padding:5px 8px;border-radius:99px;background:rgba(197,255,114,.1);color:var(--lime);font-size:9px;font-weight:900;letter-spacing:.1em}
+
+  /* Online rooms + visual room builder */
+  .online-panel{margin-top:18px}
+  .online-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end}
+  .online-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:6px}
+  .online-message{margin-top:12px;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.035);font-size:11px;color:var(--muted);line-height:1.5}
+  .online-message.good{border-color:rgba(197,255,114,.25);color:#dfffb4;background:rgba(197,255,114,.06)}
+  .online-message.bad{border-color:rgba(255,114,126,.25);color:#ffadb4;background:rgba(255,114,126,.06)}
+  .room-code{font:900 27px 'SFMono-Regular',Consolas,monospace;letter-spacing:.22em;color:var(--lime);margin:7px 0}
+  .waiting-screen{max-width:760px;margin:34px auto}
+  .waiting-screen .panel{text-align:center;padding:34px}
+  .waiting-screen h2{font-size:28px;margin:10px 0}
+  .waiting-screen p{color:var(--muted);font-size:12px;line-height:1.6}
+  .scene-setup{margin-top:18px}
+  .scene-tools{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:10px 0 14px}
+  .room-stage{height:310px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.16);border-radius:17px;background:linear-gradient(180deg,#8f94b8 0%,#565a7c 58%,#29243d 58%,#1d1a2d 100%);isolation:isolate}
+  .room-stage:before{content:'';position:absolute;inset:0 0 42% 0;background:linear-gradient(115deg,rgba(255,255,255,.13),transparent 40%),linear-gradient(90deg,transparent 49.7%,rgba(255,255,255,.13) 50%,transparent 50.3%);z-index:-1}
+  .room-stage:after{content:'';position:absolute;left:-5%;right:-5%;bottom:-8%;height:55%;background:linear-gradient(160deg,#4b4567,#27243c 65%);transform:perspective(280px) rotateX(8deg);transform-origin:top;z-index:-1;border-top:1px solid rgba(255,255,255,.2)}
+  .room-stage.has-background{background-size:cover;background-position:center;background-repeat:no-repeat}
+  .room-stage.has-background:before,.room-stage.has-background:after{display:none}
+  .room-window{position:absolute;top:12%;left:10%;width:22%;height:33%;border:7px solid rgba(29,27,50,.8);background:linear-gradient(140deg,#d3ecff,#8798c7);box-shadow:0 7px 22px rgba(0,0,0,.22)}
+  .room-window:after{content:'';position:absolute;left:50%;top:0;bottom:0;width:4px;background:rgba(29,27,50,.75)}
+  .room-lamp{position:absolute;right:12%;top:18%;width:4px;height:100px;background:#29243d}
+  .room-lamp:before{content:'';position:absolute;top:-13px;left:-21px;width:46px;height:30px;border-radius:50% 50% 8px 8px;background:#f1dfaa;box-shadow:0 0 35px rgba(255,230,155,.35)}
+  .scene-hint{position:absolute;left:12px;bottom:10px;padding:6px 9px;border-radius:8px;background:rgba(9,8,20,.65);font-size:9px;color:#e9e3ff;z-index:4}
+  .scene-object{position:absolute;z-index:3;width:clamp(60px,10%,94px);height:70px;border:1px solid rgba(255,255,255,.35);border-radius:11px;background:rgba(13,12,27,.84);box-shadow:0 8px 20px rgba(0,0,0,.34);display:flex;align-items:center;justify-content:center;flex-direction:column;overflow:hidden;transform:translate(-50%,-50%)}
+  .scene-object img{width:100%;height:47px;object-fit:cover}
+  .scene-object .scene-emoji{font-size:24px;line-height:1.1}
+  .scene-object small{width:100%;padding:3px 4px;text-align:center;font-size:7px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:rgba(0,0,0,.32)}
+  .scene-board{margin:0 0 16px;padding:18px}
+  .scene-board .panel-title{margin-bottom:10px}
+  .scene-board select{max-width:210px}
+  .sports-note{font-size:10px;color:var(--muted);line-height:1.5;margin:7px 0 0}
+  .connection-pill{display:inline-flex;align-items:center;gap:6px}
+  .connection-pill:before{content:'';width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime)}
+  .connection-pill.offline:before{background:var(--red);box-shadow:0 0 10px var(--red)}
+  @media(max-width:700px){.online-grid{grid-template-columns:1fr}.room-stage{height:245px}.waiting-screen .panel{padding:24px 16px}}
+
+  @media(max-width:610px){.option-grid{grid-template-columns:1fr;max-height:560px}}
+  @media(max-width:850px){.setup-grid,.arena{grid-template-columns:1fr}.side-stack{display:grid;grid-template-columns:1fr 1fr}.auction-card{min-height:400px}}
+  @media(max-width:610px){.app{padding:16px 13px 38px}.topbar{margin-bottom:27px}.setup-grid{gap:12px}.panel{padding:17px;border-radius:18px}.preset-grid{grid-template-columns:repeat(2,1fr)}.rules-strip{grid-template-columns:1fr}.player-fields{grid-template-columns:1fr 1fr}.scoreboard{gap:8px}.player-card{padding:13px}.player-money{font-size:21px}.arena{gap:10px}.auction-card{padding:17px;min-height:405px}.side-stack{grid-template-columns:1fr}.game-head{align-items:flex-start}.game-tools{width:100%}.game-tools .btn{flex:1}.final-grid{grid-template-columns:1fr}.item-icon{width:95px;height:95px;font-size:48px}.actions .btn{flex:1}.action-main{min-width:0}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">⚡</div><div>PUJA CLUB<small>SUBASTA DE IDEAS · 1V1</small></div></div>
+    <div class="top-actions"><span class="mini-badge" id="modeBadge">MODO LOCAL</span><button class="btn ghost" id="soundToggle" type="button" title="Activar o silenciar sonidos">🔊 Sonido</button></div>
+  </header>
+
+  <main id="setupScreen">
+    <section class="hero">
+      <div class="eyebrow">DOS jugadores · un presupuesto · cero piedad</div>
+      <h1>¿Quién arma la<br><span>mejor creación?</span></h1>
+      <p class="lead">Una subasta cara a cara: tienes dinero limitado, aparecen artículos increíbles y tendrás que decidir cuándo pujar, cuándo retirarte y cuándo dejar que tu rival se lleve algo… o regalárselo.</p>
+    </section>
+
+    <div class="setup-grid">
+      <section class="panel">
+        <div class="panel-title"><div><h2>01 / Configura la partida</h2><p>Personaliza a los dos jugadores y su presupuesto.</p></div><span class="pill">ADMIN</span></div>
+        <div class="player-fields">
+          <div class="field"><label for="player1">Jugador 1</label><input class="input" id="player1" maxlength="18" value="Jugador 1" /></div>
+          <div class="field"><label for="player2">Jugador 2</label><input class="input" id="player2" maxlength="18" value="Jugador 2" /></div>
+        </div>
+        <div class="money-field">
+          <div class="field"><label for="budget">Dinero inicial por jugador ($)</label><input class="input" id="budget" type="number" min="1" max="999" value="20" /></div>
+        </div>
+        <p class="help">Ambos comienzan con el mismo presupuesto. El dinero es ficticio y solo sirve para jugar.</p>
+        <div class="rules-strip">
+          <div class="rule"><b>01 · PUJA</b><span>La apertura mínima es $1. Se puede subir de a $1 o más.</span></div>
+          <div class="rule"><b>02 · RETIRADA</b><span>Si pasas durante una puja, el artículo se lo lleva quien tenía la oferta más alta.</span></div>
+          <div class="rule"><b>03 · SIN DINERO</b><span>Quien aún tiene saldo decide: compra por $1 o regala el artículo.</span></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title"><div><h2>02 / Elige el desafío</h2><p>Usa un preset o crea tu propia subasta.</p></div><span class="pill" id="presetCount">10 OPCIONES</span></div>
+        <div class="field"><label for="challengeName">Nombre del desafío</label><input class="input" id="challengeName" maxlength="40" value="Habitación gaming" /></div>
+        <div class="preset-grid" id="presetGrid"></div>
+        <div class="editor-head"><label for="itemsEditor">Lista de artículos / opciones</label><button class="btn ghost" id="shuffleBtn" type="button">⤨ Mezclar orden</button></div>
+        <div id="itemsEditor" class="option-grid" aria-label="Editor de opciones"></div>
+        <div class="editor-foot"><span class="count" id="itemsCount">12 opciones · mínimo 8</span><div style="display:flex;gap:7px;flex-wrap:wrap"><button class="btn secondary" id="addItemBtn" type="button">＋ Añadir opción</button><button class="btn secondary" id="restoreBtn" type="button">Restaurar preset</button></div></div>
+        <div class="start-row"><p class="help">Edita el emoji y el nombre de cada opción. Puedes añadir una imagen desde tu dispositivo; es opcional.</p><button class="btn big" id="startBtn" type="button">INICIAR SUBASTA ↗</button></div>
+      </section>
+    </div>
+
+    <section class="panel scene-setup" id="sceneSetupPanel">
+      <div class="panel-title"><div><h2>03 / Diseña la habitación</h2><p>Opcional: usa una habitación vacía como escenario. Los artículos que ganes irán apareciendo en ella.</p></div><label class="connection-pill"><input id="sceneEnabled" type="checkbox" checked style="accent-color:var(--lime)"> Activar vista</label></div>
+      <div class="scene-tools"><label class="image-pick">▧ Subir imagen de habitación vacía<input type="file" id="sceneBgInput" accept="image/*"></label><button class="btn ghost" id="clearSceneBg" type="button">Usar habitación predeterminada</button><span class="image-status" id="sceneBgStatus">Escenario ilustrado incluido</span></div>
+      <div class="room-stage" id="setupRoomPreview"><div class="room-window"></div><div class="room-lamp"></div><div class="scene-hint">VISTA PREVIA · HABITACIÓN VACÍA</div></div>
+      <p class="sports-note">También puedes subir una imagen propia. En la partida, cada jugador tendrá su propia habitación con los artículos que consiga.</p>
+    </section>
+
+    <section class="panel online-panel">
+      <div class="panel-title"><div><h2>04 / Multijugador online</h2><p>Conecta un proyecto gratuito de Supabase para crear salas privadas entre dispositivos.</p></div><span class="pill">BETA ONLINE</span></div>
+      <div class="online-grid">
+        <div class="field"><label for="supabaseUrl">Project URL de Supabase</label><input class="input" id="supabaseUrl" placeholder="https://xxxxxxxx.supabase.co" autocomplete="off"></div>
+        <div class="field"><label for="supabaseAnon">Publishable / anon key</label><input class="input" id="supabaseAnon" type="password" placeholder="sb_publishable_… o anon key" autocomplete="off"></div>
+      </div>
+      <div class="online-actions"><button class="btn secondary" id="saveCloudConfig" type="button">Guardar conexión</button><button class="btn purple" id="createRoomBtn" type="button">＋ Crear sala online</button></div>
+      <div class="online-grid" style="margin-top:14px">
+        <div class="field"><label for="joinCode">Código de sala (8 caracteres)</label><input class="input" id="joinCode" maxlength="8" placeholder="Ej. A7K9Q2B4" autocomplete="off"></div>
+        <div class="field"><label for="joinName">Tu nombre para entrar</label><input class="input" id="joinName" maxlength="18" placeholder="Tu nombre" autocomplete="off"></div>
+      </div>
+      <div class="online-actions"><button class="btn secondary" id="joinRoomBtn" type="button">Entrar a una sala ↗</button></div>
+      <div class="online-message" id="onlineMessage">Modo local listo. Para jugar online, crea un proyecto gratuito en Supabase, ejecuta el archivo SQL incluido y pega aquí la URL y la clave pública.</div>
+      <div class="online-message good hidden" id="hostRoomControls"><div>COMPARTE ESTE CÓDIGO CON TU AMIGO</div><div class="room-code" id="hostRoomCode">--------</div><button class="btn secondary" id="copyHostRoomCode" type="button">Copiar código</button></div>
+      <p class="sports-note">Las claves se guardan en este navegador. Nunca pegues aquí la <b>service_role</b> o una clave secreta. Las partidas se sincronizan normalmente en 1–2 segundos. El plan gratuito puede pausar proyectos inactivos.</p>
+    </section>
+  </main>
+
+  <main id="waitingScreen" class="waiting-screen hidden">
+    <section class="panel">
+      <div class="eyebrow">PUJA CLUB / SALA PRIVADA</div><div style="font-size:40px;margin:15px 0">🛰️</div><h2>Ya estás en la sala</h2><p>Comparte el código con tu amigo y espera a que el anfitrión inicie la subasta.</p>
+      <div class="room-code" id="waitingRoomCode">------</div><p id="waitingStatus">Conectando…</p>
+      <div class="online-actions" style="justify-content:center"><button class="btn secondary" id="copyWaitingCode" type="button">Copiar código</button><button class="btn danger" id="leaveWaitingRoom" type="button">Salir de la sala</button></div>
+    </section>
+  </main>
+
+  <main id="gameScreen" class="hidden">
+    <section class="game-head">
+      <div><div class="eyebrow">PUJA CLUB / SALA EN JUEGO</div><h1 id="gameTitle">La subasta ha comenzado.</h1><p id="gameSubtitle">Que gane quien mejor administre su dinero.</p></div>
+      <div class="game-tools"><button class="btn secondary" id="undoBtn" type="button">↶ Deshacer</button><button class="btn ghost" id="adminBtn" type="button">⚙ Administrar</button></div>
+    </section>
+    <section class="scoreboard" id="scoreboard"></section>
+    <section class="panel scene-board hidden" id="gameScenePanel"><div class="panel-title"><div><h3>🛋️ Su habitación en construcción</h3><p>Los artículos que consiga cada jugador aparecen aquí.</p></div><select id="scenePlayerSelect" aria-label="Jugador de la habitación"></select></div><div class="room-stage" id="gameRoomBoard"></div></section>
+    <section id="auctionLayout" class="arena">
+      <div class="panel auction-card">
+        <div class="roundline"><span class="round-tag" id="roundLabel">ARTÍCULO 01 / 10</span><span class="pill" id="phasePill">NUEVA PUJA</span></div>
+        <div class="item-showcase"><div class="item-icon" id="itemIcon">🖥️</div><h2 id="itemTitle">PC gamer definitiva</h2><p id="itemDetail">Una máquina que puede con todo. ¿Cuánto vale para ti?</p></div>
+        <div class="bid-display"><span class="amount" id="bidAmount">$0</span><span class="bid-label" id="bidLabel">OFERTA ACTUAL<br/>AÚN SIN PUJAS</span></div>
+        <div class="statusline" id="statusLine">Elige quién abre la subasta.</div>
+        <div id="actionArea"></div>
+      </div>
+      <aside class="side-stack">
+        <section class="panel side-panel"><h3>LO QUE YA CONSIGUIERON</h3><div class="ownership-list" id="ownershipList"></div></section>
+        <section class="panel side-panel"><div class="panel-title"><h3>HISTORIAL DE LA SUBASTA</h3><span class="pill">LIVE</span></div><div class="log" id="logList"></div></section>
+      </aside>
+    </section>
+    <section id="endScreen" class="panel end-panel hidden"></section>
+    <p class="disclaimer">PUJA CLUB · Juego local y online para dos personas · La moneda no representa dinero real.</p>
+  </main>
+</div>
+
+<div class="modal-backdrop hidden" id="adminModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal"><div class="eyebrow">CENTRO DE CONTROL</div><h2 id="modalTitle">Administrar partida</h2><p>Desde aquí puedes deshacer el último movimiento, revisar las reglas o reiniciar la sala. Los cambios de configuración se hacen antes de iniciar una nueva partida.</p>
+    <div class="modal-actions"><button class="btn secondary" id="modalUndo" type="button">↶ Deshacer último movimiento</button><button class="btn secondary" id="rulesBtn" type="button">📜 Ver reglas completas</button><button class="btn danger" id="newGameBtn" type="button">↻ Terminar y volver a configuración</button></div>
+    <div class="close-row"><button class="btn ghost" id="closeModal" type="button">Cerrar</button></div>
+  </div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  function playerCardArt(initials, role, sport='FOOTBALL'){
+    const safe=(v)=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="420" height="520" viewBox="0 0 420 520"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#17132e"/><stop offset=".55" stop-color="#6743bd"/><stop offset="1" stop-color="#f276c1"/></linearGradient><radialGradient id="r"><stop stop-color="#d7ff96" stop-opacity=".8"/><stop offset="1" stop-color="#d7ff96" stop-opacity="0"/></radialGradient></defs><rect width="420" height="520" rx="32" fill="url(#g)"/><circle cx="325" cy="125" r="160" fill="url(#r)"/><path d="M-30 390 Q180 200 460 360 L460 560 -30 560Z" fill="#090817" opacity=".35"/><circle cx="210" cy="205" r="105" fill="#fff" opacity=".08" stroke="#fff" stroke-opacity=".4" stroke-width="3"/><text x="210" y="238" text-anchor="middle" font-size="92" font-family="Arial,sans-serif" font-weight="900" fill="#fff">${safe(initials)}</text><text x="28" y="45" fill="#d8ff9d" font-size="19" font-weight="900" letter-spacing="5" font-family="Arial,sans-serif">PUJA CLUB · ${safe(sport)}</text><path d="M28 425H392" stroke="#fff" stroke-opacity=".35" stroke-width="2"/><text x="28" y="466" fill="#fff" font-size="25" font-weight="900" font-family="Arial,sans-serif">${safe(role.toUpperCase())}</text><text x="28" y="494" fill="#fff" fill-opacity=".65" font-size="13" letter-spacing="3" font-family="Arial,sans-serif">PLAYER CARD</text></svg>`;
+    return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg);
+  }
+  const footballPlayers=[
+    ['LM','Lionel Messi · Delantero','DELANTERO'],['CR7','Cristiano Ronaldo · Delantero','DELANTERO'],['KM','Kylian Mbappé · Delantero','DELANTERO'],['EH','Erling Haaland · Delantero','DELANTERO'],['NV','Neymar Jr. · Extremo','EXTREMO'],['VV','Vinícius Jr. · Extremo','EXTREMO'],['KD','Kevin De Bruyne · Medio','MEDIOCAMPISTA'],['JB','Jude Bellingham · Medio','MEDIOCAMPISTA'],['LM','Luka Modrić · Medio','MEDIOCAMPISTA'],['VD','Virgil van Dijk · Defensa','DEFENSA'],['AH','Achraf Hakimi · Defensa','DEFENSA'],['TC','Thibaut Courtois · Portero','PORTERO'],['MO','Mohamed Salah · Extremo','EXTREMO'],['RL','Robert Lewandowski · Delantero','DELANTERO']
+  ].map(([initials,title,role])=>({icon:'⚽',title,detail:`Carta ilustrada de fútbol · ${role}. Puedes sustituirla por una fotografía desde el editor.`,image:playerCardArt(initials,role,'FOOTBALL')}));
+  const basketballPlayers=[
+    ['MJ','Michael Jordan · Escolta','ESCOLTA'],['LB','LeBron James · Alero','ALERO'],['KB','Kobe Bryant · Escolta','ESCOLTA'],['SC','Stephen Curry · Base','BASE'],['SO','Shaquille O’Neal · Pívot','PÍVOT'],['MJ','Magic Johnson · Base','BASE'],['LB','Larry Bird · Alero','ALERO'],['KA','Kareem Abdul-Jabbar · Pívot','PÍVOT'],['KD','Kevin Durant · Alero','ALERO'],['GA','Giannis Antetokounmpo · Ala-pívot','ALA-PÍVOT'],['NJ','Nikola Jokić · Pívot','PÍVOT'],['TD','Tim Duncan · Ala-pívot','ALA-PÍVOT'],['AI','Allen Iverson · Base','BASE'],['DW','Dwyane Wade · Escolta','ESCOLTA']
+  ].map(([initials,title,role])=>({icon:'🏀',title,detail:`Carta ilustrada de baloncesto · ${role}. Puedes sustituirla por una fotografía desde el editor.`,image:playerCardArt(initials,role,'BASKETBALL')}));
+  const PRESETS = {
+    gaming:{name:'Habitación gaming',icon:'🎮',tag:'GAMING',scene:true,items:[
+      '🖥️ PC gamer con RTX 5090 y Ryzen 9','🪑 Silla ergonómica premium','🖥️ Monitor OLED 4K de 240 Hz','⌨️ Teclado mecánico custom','🖱️ Mouse ultraligero + mousepad XL','🎧 Auriculares de sonido espacial','💡 Iluminación RGB inteligente','🛋️ Sofá para jugar con amigos','❄️ Aire acondicionado silencioso','🎮 Consola de última generación','🎙️ Micrófono profesional para streaming','🧃 Mini refrigerador al lado del setup'
+    ]},
+    island:{name:'Isla privada de lujo',icon:'🏝️',tag:'PARAÍSO',items:[
+      '🏡 Mansión frente al mar','♨️ Jacuzzi con vista al océano','🏊 Piscina infinity privada','🛥️ Yate de lujo con capitán','🚁 Helipuerto privado','🍣 Chef personal todos los días','🎬 Cine al aire libre en la playa','🏄 Motos de agua para invitados','🌴 Playa privada con beach club','🏋️ Gimnasio con vista al mar','🛏️ Suite principal con terraza','🌅 Bar en una azotea frente al atardecer'
+    ]},
+    streamer:{name:'Setup de streamer',icon:'🎥',tag:'CREADOR',items:[
+      '💻 PC de streaming de doble rendimiento','📷 Cámara 4K profesional','🎙️ Micrófono de estudio','🎛️ Consola de controles para streaming','🖥️ Dos monitores OLED','💡 Paneles de luz profesionales','🪑 Silla ergonómica de alta gama','🎧 Audífonos de estudio','🟪 Fondo RGB personalizable','🎮 Consola para directos','🔇 Paneles acústicos para la habitación','📡 Internet de máxima velocidad'
+    ]},
+    house:{name:'Casa de tus sueños',icon:'🏡',tag:'HOGAR',scene:true,items:[
+      '🏡 Casa moderna de dos pisos','🏊 Piscina climatizada','🍿 Sala de cine privada','🍳 Cocina de chef profesional','🛏️ Suite con vestidor gigante','🌳 Jardín con quincho','🚗 Garaje para cuatro autos','🧖 Spa y sauna en casa','🏋️ Gimnasio completamente equipado','🪟 Ventanales con vista panorámica','🤖 Casa inteligente automatizada','🎱 Sala de juegos con billar'
+    ]},
+    survival:{name:'Sobrevive en una isla',icon:'🧭',tag:'SUPERVIVENCIA',items:[
+      '💧 Sistema para conseguir agua potable','⛺ Refugio resistente a tormentas','🔥 Kit para encender fuego','🎣 Equipo completo de pesca','🧰 Herramientas multiuso','🗺️ Mapa y brújula','🛶 Bote resistente','🥫 Reserva de alimentos para un mes','🩹 Botiquín completo','📻 Radio de emergencia','🛏️ Saco de dormir térmico','🔋 Panel solar portátil'
+    ]},
+    garage:{name:'Garaje de millonario',icon:'🏎️',tag:'MOTORES',items:[
+      '🏎️ Superdeportivo italiano','🚙 SUV de lujo para viajar','🏍️ Moto deportiva','⚡ Auto eléctrico de alta gama','🛻 Camioneta todoterreno','🧼 Lavado y detailing privado','🏁 Simulador profesional de carreras','🏠 Garaje climatizado de colección','🔧 Taller mecánico privado','⛽ Estación de carga propia','🚁 Helicóptero personal','🏆 Auto clásico de colección'
+    ]},
+    football:{name:'Arma tu XI de fútbol',icon:'⚽',tag:'FÚTBOL',items:footballPlayers},
+    basketball:{name:'Crea tu quinteto NBA',icon:'🏀',tag:'BASKET',items:basketballPlayers},
+    club:{name:'Construye un club de fútbol',icon:'🏟️',tag:'CLUB',items:[
+      '🏟️ Estadio para 80.000 personas','⭐ Delantero estrella mundial','🧤 Portero de clase mundial','🧠 Entrenador legendario','🚌 Bus oficial de lujo','🏋️ Centro de alto rendimiento','🧒 Academia juvenil de élite','📣 Hinchada organizada y fiel','🩺 Equipo médico y recuperación','📊 Departamento de análisis táctico','🏆 Museo lleno de trofeos','🌱 Cancha de entrenamiento perfecta'
+    ]},
+    esports:{name:'Crea tu equipo esports',icon:'🕹️',tag:'ESPORTS',items:[
+      '🎯 IGL / capitán estratégico','⚡ Entry fragger explosivo','🧠 Cerebro táctico y analista','🎮 Flex player para cualquier rol','🎯 AWPer / francotirador','🏠 Gaming house con salas privadas','🧑‍🏫 Coach profesional','📈 Analista de datos y VODs','🖥️ PCs de torneo de alto nivel','🎥 Creador de contenido del equipo','🤝 Patrocinador principal','🏆 Plaza asegurada en un Major'
+    ]},
+    custom:{name:'Desafío personalizado',icon:'✍️',tag:'CUSTOM',items:[
+      '✨ Primera opción personalizada','🔥 Segunda opción personalizada','💎 Tercera opción personalizada','🚀 Cuarta opción personalizada','🎯 Quinta opción personalizada','🏆 Sexta opción personalizada','⚡ Séptima opción personalizada','🌟 Octava opción personalizada'
+    ]}
+  };
+  const $ = id => document.getElementById(id);
+  let selectedPreset = 'gaming';
+  let draftItems = [];
+  let nextDraftId = 1;
+  let game = null;
+  let undoStack = [];
+  let soundOn = true;
+  let audioCtx = null;
+  let sceneEnabled = true;
+  let sceneBgDataUrl = '';
+  let cloudClient = null;
+  let onlineSession = null;
+  let pollTimer = null;
+  let pollingNow = false;
+  let remoteApplying = false;
+  let supabaseSdkPromise = null;
+
+  function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  function itemFromLine(line,i){
+    if(line && typeof line==='object') return {id:nextDraftId++,icon:line.icon||'✨',title:line.title||`Opción ${i+1}`,detail:line.detail||'Una oportunidad única. ¿La quieres para tu creación?',image:line.image||''};
+    const match=line.match(/^(\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic})*)\s*/u);
+    return {id:nextDraftId++,icon:match?match[1]:'✨',title:line.replace(/^\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic})*\s*/u,'').trim()||`Opción ${i+1}`,detail:'Una oportunidad única. ¿La quieres para tu creación?',image:''};
+  }
+  function parseItems(){return draftItems.map(({id,...item})=>({...item,detail:item.detail||'Una oportunidad única. ¿La quieres para tu creación?'}));}
+  function renderDraftEditor(){
+    $('itemsEditor').innerHTML=draftItems.map((item,i)=>`<div class="option-card" data-index="${i}">
+      <div class="option-card-top">
+        <div class="option-thumb">${item.image?`<img src="${item.image}" alt="Imagen de ${escapeHtml(item.title)}">`:''}<span class="thumb-emoji">${escapeHtml(item.icon||'✨')}</span></div>
+        <div class="option-fields">
+          <div><label>Emoji</label><input class="option-input" data-field="icon" maxlength="8" value="${escapeHtml(item.icon)}" aria-label="Emoji de la opción ${i+1}"></div>
+          <div><label>Nombre de la opción</label><input class="option-input" data-field="title" maxlength="90" value="${escapeHtml(item.title)}" aria-label="Nombre de la opción ${i+1}"></div>
+        </div>
+      </div>
+      <div class="option-card-actions">
+        <label class="image-pick">▧ ${item.image?'Cambiar imagen':'Añadir imagen'}<input type="file" data-image accept="image/*"></label>
+        <span class="image-status">${item.image?'Imagen añadida':'Imagen opcional'}</span>
+        ${item.image?`<button class="remove-option" type="button" data-clear-image>Quitar imagen</button>`:''}
+        <button class="remove-option" type="button" data-remove>✕</button>
+      </div>
+    </div>`).join('');
+    $('itemsEditor').querySelectorAll('[data-field]').forEach(input=>input.addEventListener('input',()=>{
+      const card=input.closest('[data-index]'),i=Number(card.dataset.index),field=input.dataset.field;
+      draftItems[i][field]=input.value;
+      if(field==='icon')card.querySelector('.thumb-emoji').textContent=input.value||'✨';
+      updateCount();
+    }));
+    $('itemsEditor').querySelectorAll('[data-remove]').forEach(btn=>btn.addEventListener('click',()=>{
+      draftItems.splice(Number(btn.closest('[data-index]').dataset.index),1);renderDraftEditor();updateCount();
+    }));
+    $('itemsEditor').querySelectorAll('[data-clear-image]').forEach(btn=>btn.addEventListener('click',()=>{
+      draftItems[Number(btn.closest('[data-index]').dataset.index)].image='';renderDraftEditor();
+    }));
+    $('itemsEditor').querySelectorAll('[data-image]').forEach(input=>input.addEventListener('change',async()=>{
+      const file=input.files&&input.files[0];if(!file)return;
+      const i=Number(input.closest('[data-index]').dataset.index);
+      if(!file.type.startsWith('image/')){alert('Selecciona un archivo de imagen.');input.value='';return;}
+      if(file.size>12*1024*1024){alert('La imagen supera los 12 MB. Elige una más ligera.');input.value='';return;}
+      const pick=input.closest('.option-card').querySelector('.image-pick');pick.textContent='Procesando…';
+      try{draftItems[i].image=await compressImage(file);renderDraftEditor();}
+      catch(err){console.error(err);alert('No se pudo cargar esa imagen. Prueba con otro archivo.');renderDraftEditor();}
+    }));
+  }
+  function compressImage(file){return new Promise((resolve,reject)=>{
+    const reader=new FileReader();reader.onerror=()=>reject(new Error('No se pudo leer el archivo.'));
+    reader.onload=()=>{const img=new Image();img.onerror=()=>reject(new Error('Imagen inválida.'));img.onload=()=>{
+      const scale=Math.min(1,850/Math.max(img.width,img.height)),canvas=document.createElement('canvas');
+      canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));
+      const ctx=canvas.getContext('2d');ctx.fillStyle='#141326';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);
+      resolve(canvas.toDataURL('image/jpeg',.68));
+    };img.src=reader.result;};reader.readAsDataURL(file);
+  });}
+  function presetMarkup(){
+    $('presetGrid').innerHTML=Object.entries(PRESETS).map(([key,p])=>`<button type="button" class="preset ${key===selectedPreset?'active':''}" data-preset="${key}"><span class="emoji">${p.icon}</span><strong>${escapeHtml(p.name)}</strong><small>${p.items.length} artículos</small></button>`).join('');
+    $('presetGrid').querySelectorAll('[data-preset]').forEach(btn=>btn.addEventListener('click',()=>loadPreset(btn.dataset.preset)));
+  }
+  function loadPreset(key){selectedPreset=key;$('challengeName').value=PRESETS[key].name;sceneEnabled=!!PRESETS[key].scene;$('sceneEnabled').checked=sceneEnabled;draftItems=PRESETS[key].items.map((line,i)=>itemFromLine(line,i));renderDraftEditor();presetMarkup();updateCount();renderSetupRoom();}
+  function updateCount(){const n=draftItems.length;$('itemsCount').textContent=`${n} opciones · mínimo 8`;$('presetCount').textContent=`${n} OPCIONES`;$('itemsCount').style.color=n>=8?'var(--lime)':'var(--red)';const waiting=onlineSession&&onlineSession.role===0&&(onlineSession.state?.players?.[1]?.name||'')==='Esperando jugador 2';$('startBtn').disabled=n<8||!!waiting;}
+  function renderSetupRoom(){
+    const stage=$('setupRoomPreview');if(!stage)return;
+    stage.classList.toggle('has-background',!!sceneBgDataUrl);
+    stage.style.backgroundImage=sceneBgDataUrl?`url("${sceneBgDataUrl}")`:'';
+    stage.innerHTML=sceneBgDataUrl?'<div class="scene-hint">FONDO PERSONALIZADO · LOS OBJETOS SE AÑADIRÁN EN LA PARTIDA</div>':'<div class="room-window"></div><div class="room-lamp"></div><div class="scene-hint">VISTA PREVIA · HABITACIÓN VACÍA</div>';
+  }
+  function renderRoomBoard(){
+    const panel=$('gameScenePanel');if(!panel||!game||!game.sceneEnabled){panel?.classList.add('hidden');return;}
+    panel.classList.remove('hidden');
+    const select=$('scenePlayerSelect');
+    const chosen=Number(select.value||0);select.innerHTML=game.players.map((p,i)=>`<option value="${i}">${escapeHtml(p.name)}</option>`).join('');select.value=String(Math.min(chosen,1));
+    const player=game.players[Number(select.value)]||game.players[0],stage=$('gameRoomBoard');
+    stage.classList.toggle('has-background',!!game.sceneBg);stage.style.backgroundImage=game.sceneBg?`url("${game.sceneBg}")`:'';
+    stage.innerHTML=game.sceneBg?'<div class="scene-hint">HABITACIÓN DE '+escapeHtml(player.name).toUpperCase()+'</div>':'<div class="room-window"></div><div class="room-lamp"></div><div class="scene-hint">HABITACIÓN DE '+escapeHtml(player.name).toUpperCase()+'</div>';
+    const positions=[[20,68],[43,70],[69,69],[84,45],[53,43],[31,39],[12,43],[74,27],[47,83],[91,76],[60,20],[25,84],[39,19],[88,59],[8,79]];
+    player.items.forEach((item,i)=>{
+      const pos=positions[i%positions.length];const obj=document.createElement('div');obj.className='scene-object';obj.style.left=pos[0]+'%';obj.style.top=pos[1]+'%';
+      if(item.image){const img=document.createElement('img');img.src=item.image;img.alt=item.title;obj.appendChild(img);}else{const emoji=document.createElement('div');emoji.className='scene-emoji';emoji.textContent=item.icon||'✨';obj.appendChild(emoji);}
+      const caption=document.createElement('small');caption.textContent=item.title;obj.appendChild(caption);stage.appendChild(obj);
+    });
+  }
+  function renderOnlineMessage(message,type=''){const el=$('onlineMessage');if(!el)return;el.className='online-message'+(type?' '+type:'');el.textContent=message;}
+  function setSetupLocked(locked){
+    ['player1','player2','budget','challengeName','sceneEnabled','sceneBgInput','clearSceneBg','addItemBtn','restoreBtn','shuffleBtn'].forEach(id=>{const el=$(id);if(el)el.disabled=locked;});
+    $('presetGrid').querySelectorAll('button').forEach(b=>b.disabled=locked);
+    $('itemsEditor').querySelectorAll('input,button').forEach(el=>el.disabled=locked);
+    $('createRoomBtn').disabled=locked;
+  }
+  async function restoreSavedRoom(){
+    let code='',token='';try{code=localStorage.getItem('puja_room_code')||'';token=localStorage.getItem('puja_room_token')||'';}catch(e){}
+    if(!code||!token||!await loadSupabaseClient())return;
+    try{
+      const r=await cloudClient.rpc('puja_get_room',{p_code:code,p_token:token});if(r.error)throw r.error;
+      const data=r.data;onlineSession={code:data.code,token,roomId:data.room_id,role:Number(data.role),revision:Number(data.revision),state:data.state};setRoomUi(onlineSession.role,code);
+      if(onlineSession.role===0){$('hostRoomControls').classList.remove('hidden');if(data.state.status==='waiting'){const st=data.state;$('player1').value=st.players?.[0]?.name||'Jugador 1';$('player2').value=st.players?.[1]?.name||'Jugador 2';$('budget').value=st.budget||20;$('challengeName').value=st.challenge||'Desafío personalizado';draftItems=(st.items||[]).map((it,i)=>({...it,id:nextDraftId++}));sceneEnabled=!!st.sceneEnabled;$('sceneEnabled').checked=sceneEnabled;sceneBgDataUrl=st.sceneBg||'';$('sceneBgStatus').textContent=sceneBgDataUrl?'Fondo de sala cargado':'Escenario ilustrado incluido';renderDraftEditor();renderSetupRoom();updateCount();}setSetupLocked(true);$('startBtn').textContent='INICIAR SALA ONLINE ↗';const joined=(data.state.players?.[1]?.name||'')!=='Esperando jugador 2';$('startBtn').disabled=!joined;}
+      if(data.state.status==='playing'&&data.state.game){game=data.state.game;$('setupScreen').classList.add('hidden');$('waitingScreen').classList.add('hidden');$('gameScreen').classList.remove('hidden');$('gameTitle').textContent=game.challenge;$('gameSubtitle').textContent=`${game.players[0].name} vs. ${game.players[1].name} · Sala ${code}`;renderGame();}
+      else if(onlineSession.role===1){$('setupScreen').classList.add('hidden');$('waitingScreen').classList.remove('hidden');$('waitingRoomCode').textContent=code;$('waitingStatus').textContent='Sesión recuperada. Esperando al anfitrión…';}
+      startRoomPolling();
+    }catch(e){console.warn('No se pudo restaurar la sala guardada:',e);try{localStorage.removeItem('puja_room_code');localStorage.removeItem('puja_room_token');localStorage.removeItem('puja_room_role');}catch(x){}renderOnlineMessage('La sala anterior ya no existe o la sesión caducó. Puedes crear una nueva.');}
+  }
+  async function loadSupabaseSdk(){
+    if(window.supabase?.createClient)return true;
+    if(!supabaseSdkPromise){supabaseSdkPromise=new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';script.onload=()=>resolve(true);script.onerror=()=>{supabaseSdkPromise=null;reject(new Error('No se pudo descargar Supabase JS desde jsDelivr.'));};document.head.appendChild(script);});}
+    await supabaseSdkPromise;return !!window.supabase?.createClient;
+  }
+  async function loadSupabaseClient(){
+    const url=$('supabaseUrl').value.trim(),key=$('supabaseAnon').value.trim();
+    if(!url||!key){renderOnlineMessage('Introduce tu Project URL y tu clave pública (publishable / anon) de Supabase.','bad');return false;}
+    try{renderOnlineMessage('Conectando con Supabase…');if(!await loadSupabaseSdk())throw new Error('Supabase JS no está disponible.');cloudClient=window.supabase.createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false}});localStorage.setItem('puja_supabase_url',url);localStorage.setItem('puja_supabase_anon',key);renderOnlineMessage('Conexión guardada en este navegador. Ya puedes crear o unirte a una sala.','good');return true;}
+    catch(e){console.error(e);renderOnlineMessage('No se pudo inicializar la conexión: '+e.message,'bad');return false;}
+  }
+  function loadSavedCloudConfig(){try{$('supabaseUrl').value=localStorage.getItem('puja_supabase_url')||'';$('supabaseAnon').value=localStorage.getItem('puja_supabase_anon')||'';}catch(e){}}
+  function randomToken(){return (crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(36).slice(2))+Math.random().toString(36).slice(2);}
+  async function uploadRoomAsset(data,roomCode){
+    if(!data||!data.startsWith('data:image/')||data.startsWith('data:image/svg+xml'))return data||'';
+    const response=await fetch(data),blob=await response.blob();
+    const ext=blob.type==='image/png'?'png':blob.type==='image/webp'?'webp':'jpg';
+    const path=`${roomCode}/${randomToken().replace(/[^a-zA-Z0-9]/g,'')}.${ext}`;
+    const {error}=await cloudClient.storage.from('puja-assets').upload(path,blob,{contentType:blob.type,upsert:false,cacheControl:'3600'});
+    if(error)throw error;
+    return cloudClient.storage.from('puja-assets').getPublicUrl(path).data.publicUrl;
+  }
+  async function uploadDraftAssets(code){
+    const copy=parseItems();
+    for(const item of copy){if(item.image?.startsWith('data:image/'))item.image=await uploadRoomAsset(item.image,code);}
+    const bg=sceneBgDataUrl?await uploadRoomAsset(sceneBgDataUrl,code):'';
+    return {items:copy,sceneBg:bg};
+  }
+  function stopRoomPolling(){if(pollTimer){clearInterval(pollTimer);pollTimer=null;}pollingNow=false;}
+  function setRoomUi(role,code){
+    $('modeBadge').textContent=role===0?'ONLINE · HOST':'ONLINE · INVITADO';
+    $('waitingRoomCode').textContent=code||'------';$('hostRoomCode').textContent=code||'--------';
+  }
+  async function createOnlineRoom(){
+    if(!await loadSupabaseClient())return;
+    if(draftItems.length<8){renderOnlineMessage('Añade al menos 8 opciones antes de crear la sala.','bad');return;}
+    $('createRoomBtn').disabled=true;renderOnlineMessage('Preparando sala e imágenes…');
+    try{
+      const token=randomToken(),budget=Math.max(1,Math.min(999,Math.floor(Number($('budget').value)||20)));
+      const result=await cloudClient.rpc('puja_create_room',{p_token:token,p_state:{status:'waiting',players:[{name:$('player1').value.trim()||'Jugador 1'},{name:'Esperando jugador 2'}],budget,challenge:$('challengeName').value.trim()||'Desafío personalizado',items:[],sceneEnabled,sceneBg:'',game:null}});
+      if(result.error)throw result.error;
+      const room=result.data;
+      const assets=await uploadDraftAssets(room.code);
+      const latest=await cloudClient.rpc('puja_get_room',{p_code:room.code,p_token:token});if(latest.error)throw latest.error;
+      const waitingState={status:'waiting',players:latest.data.state.players||[{name:$('player1').value.trim()||'Jugador 1'},{name:'Esperando jugador 2'}],budget,challenge:$('challengeName').value.trim()||'Desafío personalizado',items:assets.items,sceneEnabled,sceneBg:assets.sceneBg,game:null};
+      const currentRevision=Number(latest.data.revision||room.revision||0);
+      let saved=await cloudClient.rpc('puja_save_room_state',{p_code:room.code,p_token:token,p_expected_revision:currentRevision,p_state:waitingState});
+      if(saved.error&&String(saved.error.message||'').includes('REVISION_CONFLICT')){const fresh=await cloudClient.rpc('puja_get_room',{p_code:room.code,p_token:token});if(fresh.error)throw fresh.error;waitingState.players=fresh.data.state.players||waitingState.players;saved=await cloudClient.rpc('puja_save_room_state',{p_code:room.code,p_token:token,p_expected_revision:Number(fresh.data.revision),p_state:waitingState});}
+      if(saved.error)throw saved.error;
+      onlineSession={code:room.code,token,roomId:room.room_id,role:0,revision:Number(saved.data.revision||currentRevision+1),state:waitingState};
+      setRoomUi(0,room.code);$('hostRoomControls').classList.remove('hidden');setSetupLocked(true);$('startBtn').textContent='INICIAR SALA ONLINE ↗';$('startBtn').disabled=true;localStorage.setItem('puja_room_code',room.code);localStorage.setItem('puja_room_token',token);localStorage.setItem('puja_room_role','0');
+      renderOnlineMessage(`Sala ${room.code} creada. Comparte el código con tu amigo. Cuando entre, podrás iniciar la subasta.`,'good');
+      $('waitingStatus').textContent='Esperando al segundo jugador…';startRoomPolling();
+    }catch(e){console.error(e);renderOnlineMessage('No se pudo crear la sala: '+(e.message||'Error desconocido')+'. Comprueba que ejecutaste el SQL y configuraste el bucket de imágenes.','bad');}
+    finally{$('createRoomBtn').disabled=!!(onlineSession&&onlineSession.role===0);}
+  }
+  async function joinOnlineRoom(){
+    if(!await loadSupabaseClient())return;
+    const code=$('joinCode').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+    const name=$('joinName').value.trim()||'Jugador 2';
+    if(code.length!==8){renderOnlineMessage('Escribe el código de sala de 8 caracteres.','bad');return;}
+    $('joinRoomBtn').disabled=true;renderOnlineMessage('Buscando sala…');
+    try{
+      const token=randomToken();const result=await cloudClient.rpc('puja_join_room',{p_code:code,p_token:token,p_player_name:name});
+      if(result.error)throw result.error;
+      const room=result.data;onlineSession={code:room.code,token,roomId:room.room_id,role:1,revision:Number(room.revision||0),state:room.state};
+      setRoomUi(1,code);localStorage.setItem('puja_room_code',code);localStorage.setItem('puja_room_token',token);localStorage.setItem('puja_room_role','1');$('setupScreen').classList.add('hidden');$('waitingScreen').classList.remove('hidden');$('waitingRoomCode').textContent=code;$('waitingStatus').textContent='Conectado. Esperando que el anfitrión inicie…';
+      startRoomPolling();renderOnlineMessage('Te has unido a la sala '+code+'.','good');
+    }catch(e){console.error(e);renderOnlineMessage('No se pudo entrar: '+(e.message||'Revisa el código y que la sala siga disponible.'),'bad');}
+    finally{$('joinRoomBtn').disabled=false;}
+  }
+  async function pullRoomState(){
+    if(!onlineSession||!cloudClient||pollingNow)return;pollingNow=true;
+    try{
+      const r=await cloudClient.rpc('puja_get_room',{p_code:onlineSession.code,p_token:onlineSession.token});
+      if(r.error)throw r.error;const data=r.data;
+      if(Number(data.revision)>onlineSession.revision){
+        onlineSession.revision=Number(data.revision);onlineSession.state=data.state;
+        if(data.state.status==='waiting'){
+          if(onlineSession.role===0){const joined=(data.state.players?.[1]?.name||'Esperando jugador 2')!=='Esperando jugador 2';$('startBtn').disabled=!joined;$('startBtn').textContent=joined?'INICIAR SUBASTA ONLINE ↗':'ESPERANDO JUGADOR…';renderOnlineMessage(joined?`${data.state.players[1].name} se unió. Ya puedes iniciar.`:'Sala '+onlineSession.code+' creada. Esperando al segundo jugador…',joined?'good':'');}
+          else $('waitingStatus').textContent='Conectado a la sala. Esperando que el anfitrión inicie…';
+        }else if(data.state.status==='playing'&&data.state.game){
+          remoteApplying=true;game=data.state.game;undoStack=[];
+          $('waitingScreen').classList.add('hidden');$('setupScreen').classList.add('hidden');$('gameScreen').classList.remove('hidden');
+          $('gameTitle').textContent=game.challenge;$('gameSubtitle').textContent=`${game.players[0].name} vs. ${game.players[1].name} · Sala ${onlineSession.code}`;
+          $('modeBadge').textContent=onlineSession.role===0?'ONLINE · HOST':'ONLINE · INVITADO';renderGame();remoteApplying=false;
+        }
+      }
+    }catch(e){console.warn('Puja polling:',e);if(onlineSession)renderOnlineMessage('Conexión interrumpida. Reintentando…','bad');}
+    finally{pollingNow=false;}
+  }
+  function startRoomPolling(){stopRoomPolling();pullRoomState();pollTimer=setInterval(pullRoomState,1200);}
+  async function saveOnlineState(state){
+    if(!onlineSession||remoteApplying)return true;
+    const before=onlineSession.state;
+    const {data,error}=await cloudClient.rpc('puja_save_room_state',{p_code:onlineSession.code,p_token:onlineSession.token,p_expected_revision:onlineSession.revision,p_state:state});
+    if(error){console.warn(error);await pullRoomState();return false;}
+    onlineSession.revision=Number(data.revision||onlineSession.revision+1);onlineSession.state=state;return true;
+  }
+  async function syncOnlineGame(){
+    if(!onlineSession||!game||remoteApplying)return;
+    const state={...(onlineSession.state||{}),status:'playing',game};
+    const ok=await saveOnlineState(state);
+    if(!ok){alert('La sala cambió desde otro dispositivo. Se ha recuperado el estado más reciente; vuelve a intentarlo cuando sea tu turno.');}
+  }
+  async function exitOnlineRoom(){const previous=onlineSession;stopRoomPolling();if(previous&&cloudClient){try{await cloudClient.rpc('puja_leave_room',{p_code:previous.code,p_token:previous.token});}catch(e){console.warn('No se pudo cerrar la sala:',e);}}onlineSession=null;game=null;undoStack=[];try{localStorage.removeItem('puja_room_code');localStorage.removeItem('puja_room_token');localStorage.removeItem('puja_room_role');}catch(e){}$('hostRoomControls').classList.add('hidden');$('waitingScreen').classList.add('hidden');$('gameScreen').classList.add('hidden');$('setupScreen').classList.remove('hidden');setSetupLocked(false);$('modeBadge').textContent='MODO LOCAL';$('startBtn').textContent='INICIAR SUBASTA ↗';$('startBtn').disabled=draftItems.length<8;renderOnlineMessage('Has salido de la sala. Puedes seguir jugando en modo local.');}
+  function playTone(freq=560,duration=.07){if(!soundOn)return;try{audioCtx ||= new (window.AudioContext||window.webkitAudioContext)();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=freq;o.type='sine';g.gain.setValueAtTime(.045,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+duration);}catch(e){}}
+  function money(n){return '$'+n;}
+  function other(i){return i===0?1:0;}
+  function snapshot(){const copy={...game,players:game.players.map(p=>({...p,items:[...p.items]})),items:game.items,openingPasses:[...game.openingPasses],log:[...game.log]};undoStack.push(copy);if(undoStack.length>50)undoStack.shift();}
+  function log(message){game.log.unshift(message);}
+  function currentItem(){return game.items[game.index];}
+  function isSolo(){return game.players.some(p=>p.money===0)&&game.players.some(p=>p.money>0);}
+  function soloChooser(){return game.players.findIndex(p=>p.money>0);}
+  function finishIfNeeded(){if(game.players.every(p=>p.money===0)||game.index>=game.items.length){game.phase='finished';game.winnerVote=null;return true;}return false;}
+  function advanceItem(){
+    game.index++;
+    if(finishIfNeeded())return;
+    game.currentBid=0;game.highBidder=null;game.openingPasses=[];game.phase='opening';game.opener=other(game.opener);game.turn=game.opener;
+  }
+  function assignItem(playerIndex,cost,kind){
+    const item=currentItem();game.players[playerIndex].money-=cost;game.players[playerIndex].items.push({...item,paid:cost});
+    if(kind==='gift')log(`<b>${escapeHtml(game.players[other(playerIndex)].name)}</b> regaló <b>${escapeHtml(item.title)}</b> a <b>${escapeHtml(game.players[playerIndex].name)}</b>.`);
+    else log(`<b>${escapeHtml(game.players[playerIndex].name)}</b> se llevó <b>${escapeHtml(item.title)}</b> por <b>${money(cost)}</b>.`);
+    advanceItem();
+  }
+  async function startGame(){
+    if(onlineSession&&onlineSession.role!==0){alert('Solo el anfitrión puede iniciar la subasta.');return;}
+    if(onlineSession&&(onlineSession.state?.players?.[1]?.name||'')==='Esperando jugador 2'){alert('Primero debe entrar el segundo jugador.');return;}
+    const roomState=onlineSession?.state;
+    const players=onlineSession?roomState.players.map(p=>p.name):[$('player1').value.trim()||'Jugador 1',$('player2').value.trim()||'Jugador 2'];
+    const budget=onlineSession?Number(roomState.budget):Math.max(1,Math.min(999,Math.floor(Number($('budget').value)||20)));
+    const items=onlineSession?roomState.items:parseItems();
+    if(items.length<8){alert('Necesitas al menos 8 opciones para iniciar.');return;}
+    game={players:players.map(name=>({name,money:budget,startMoney:budget,items:[]})),items,index:0,phase:'opening',opener:0,turn:0,currentBid:0,highBidder:null,openingPasses:[],log:[],challenge:onlineSession?roomState.challenge:($('challengeName').value.trim()||'Desafío personalizado'),winnerVote:null,sceneEnabled:onlineSession?!!roomState.sceneEnabled:sceneEnabled,sceneBg:onlineSession?(roomState.sceneBg||''):sceneBgDataUrl};
+    undoStack=[];log(`Comienza <b>${escapeHtml(game.challenge)}</b>. Cada jugador recibe <b>${money(budget)}</b>.`);
+    $('setupScreen').classList.add('hidden');$('waitingScreen').classList.add('hidden');$('gameScreen').classList.remove('hidden');$('gameTitle').textContent=game.challenge;$('gameSubtitle').textContent=`${game.players[0].name} vs. ${game.players[1].name} · Presupuesto inicial: ${money(budget)} cada uno${onlineSession?' · Sala '+onlineSession.code:''}`;
+    renderGame();playTone(650,.12);window.scrollTo({top:0,behavior:'smooth'});
+    if(onlineSession)await syncOnlineGame();
+  }
+  function actionButton(text,cls,handler,disabled=false){return `<button type="button" class="btn ${cls||''}" data-action="${handler}" ${disabled?'disabled':''}>${text}</button>`;}
+  function renderScoreboard(){
+    $('scoreboard').innerHTML=game.players.map((p,i)=>{
+      const active=(game.phase==='opening'&&game.turn===i)||(game.phase==='auction'&&game.turn===i)||(isSolo()&&game.phase!=='finished'&&soloChooser()===i);
+      const pct=Math.max(0,Math.min(100,p.money/p.startMoney*100));
+      return `<div class="player-card ${active?'active':''}"><div class="player-top"><span class="player-name">${i===0?'🟣':'🌸'} ${escapeHtml(p.name)}</span><span class="pill">${p.items.length} CONSEGUIDOS</span></div><div class="player-money ${p.money===0?'zero':''}">${money(p.money)} <small style="font:9px Inter,system-ui,sans-serif;color:var(--muted)">DISPONIBLES</small></div><div class="bar"><i style="width:${pct}%"></i></div><div class="player-items">${p.items.length?`Ha conseguido ${p.items.length} artículo(s).`:'Todavía no consigue artículos.'}</div></div>`;
+    }).join('');
+  }
+  function renderOwnership(){
+    $('ownershipList').innerHTML=game.players.map((p,i)=>`<div class="owner-block"><div class="owner-label"><span>${escapeHtml(p.name)}</span><span>${p.items.length} ${p.items.length===1?'ARTÍCULO':'ARTÍCULOS'}</span></div><div class="owned">${p.items.length?p.items.map(it=>`${it.icon} ${escapeHtml(it.title)} <span style="color:#77728f">(${money(it.paid)})</span>`).join('<br>'):'<span class="empty">El inventario está vacío.</span>'}</div></div>`).join('');
+  }
+  function renderLog(){ $('logList').innerHTML=game.log.length?game.log.slice(0,18).map((entry,i)=>`<div class="log-entry ${i===0?'latest':''}">${entry}</div>`).join(''):'<div class="empty">Todavía no hay movimientos.</div>'; }
+  function renderActions(){
+    const area=$('actionArea');
+    if(game.phase==='finished'){area.innerHTML='';return;}
+    if(onlineSession){const active=isSolo()?soloChooser():game.turn;if(active!==onlineSession.role){$('phasePill').textContent='ESPERANDO';$('statusLine').className='statusline';$('statusLine').textContent=`Es el turno de ${game.players[active].name}. La partida se actualizará automáticamente.`;area.innerHTML='<p class="help" style="text-align:center;margin:14px 0">👀 Observa la puja desde tu dispositivo. Tus controles aparecerán cuando te toque.</p>';return;}}
+    if(isSolo()){
+      const chooser=soloChooser(),recipient=other(chooser),canBuy=game.players[chooser].money>=1;
+      $('phasePill').textContent='DECISIÓN ESPECIAL';$('statusLine').className='statusline warn';$('statusLine').textContent=`${game.players[chooser].name}, tu rival se quedó sin dinero. Tú decides qué pasa con este artículo.`;
+      area.innerHTML=`<div class="amount-row"><label>Precio si te lo quedas</label><input id="soloAmount" class="amount-input" type="number" min="1" max="${game.players[chooser].money}" value="1"></div><div class="actions">${actionButton(`Me lo quedo`, 'action-main', 'soloBuy',!canBuy)}${actionButton(`Se lo regalo a ${escapeHtml(game.players[recipient].name)}`,'secondary','soloGift')}</div>`;
+      return;
+    }
+    if(game.phase==='opening'){
+      const p=game.players[game.turn];$('phasePill').textContent='ABRIR SUBASTA';$('statusLine').className='statusline';$('statusLine').textContent=`${p.name}, empiezas tú. Abre con $1 o más, o pasa y deja que el rival decida.`;
+      area.innerHTML=`<div class="amount-row"><label>Mi oferta inicial</label><input id="openAmount" class="amount-input" type="number" min="1" max="${p.money}" value="1"></div><div class="actions">${actionButton('Abrir puja ↗','action-main','openBid')}${actionButton('Pasar turno','secondary','openingPass')}</div>`;
+    }else if(game.phase==='auction'){
+      const p=game.players[game.turn],top=game.players[game.highBidder],min=game.currentBid+1,max=p.money;const canRaise=max>=min;
+      $('phasePill').textContent='PUJA EN CURSO';$('statusLine').className='statusline good';$('statusLine').textContent=`${p.name}, ${top.name} va ganando con ${money(game.currentBid)}. ¿Subes o te retiras?`;
+      area.innerHTML=`<div class="amount-row"><label>Tu nueva oferta</label><input id="raiseAmount" class="amount-input" type="number" min="${min}" max="${max}" value="${Math.min(min,max)}"></div><div class="actions">${actionButton(`Subir oferta ↗`,'action-main','raise',!canRaise)}${actionButton('Paso · se lo lleva el rival','secondary','auctionPass')}</div>`;
+    }
+  }
+  function renderEnd(){
+    $('auctionLayout').classList.add('hidden');$('endScreen').classList.remove('hidden');
+    const p=game.players;
+    $('endScreen').innerHTML=`<div class="trophy">🏆</div><div class="eyebrow">SUBASTA FINALIZADA</div><h2>Se acabó el presupuesto.<br>¿Quién ganó?</h2><p>${game.index>=game.items.length?'Se agotaron todas las opciones.':'Ambos jugadores llegaron a $0.'} La decisión final es de ustedes: revisen lo que consiguió cada uno y voten quién armó la mejor creación.</p><div class="final-grid">${p.map((x,i)=>`<div class="final-player"><h3>${i===0?'🟣':'🌸'} ${escapeHtml(x.name)}</h3><div class="final-money">${money(x.money)} restantes</div><div class="final-items">${x.items.length?x.items.map(it=>`${it.icon} ${escapeHtml(it.title)} <span style="color:#77728f">· ${money(it.paid)}</span>`).join('<br>'):'No consiguió artículos.'}</div></div>`).join('')}</div><div class="vote-area"><h3>Votación final</h3><p>¿Quién construyó la mejor habitación, isla o desafío?</p><div class="vote-buttons"><button class="btn" data-vote="0">Gana ${escapeHtml(p[0].name)}</button><button class="btn pink" data-vote="1">Gana ${escapeHtml(p[1].name)}</button><button class="btn secondary" data-vote="draw">Empate 🤝</button></div>${game.winnerVote===null?'':`<div class="winner">${game.winnerVote==='draw'?'¡Empate! 🤝':`🏆 ¡${escapeHtml(p[game.winnerVote].name)} gana PUJA CLUB!`}</div>`}</div><div class="actions" style="margin-top:19px">${actionButton('Jugar otra partida ↻','big','newGame')}</div>`;
+    $('endScreen').querySelectorAll('[data-vote]').forEach(btn=>btn.addEventListener('click',async()=>{game.winnerVote=btn.dataset.vote==='draw'?'draw':Number(btn.dataset.vote);playTone(760,.16);renderEnd();if(onlineSession)await syncOnlineGame();}));
+    $('endScreen').querySelectorAll('[data-action="newGame"]').forEach(btn=>btn.addEventListener('click',backToSetup));
+  }
+  function renderGame(){
+    renderScoreboard();renderOwnership();renderLog();renderRoomBoard();
+    if(game.phase==='finished'){renderEnd();$('undoBtn').disabled=undoStack.length===0;return;}
+    $('auctionLayout').classList.remove('hidden');$('endScreen').classList.add('hidden');
+    const item=currentItem();$('roundLabel').textContent=`ARTÍCULO ${String(game.index+1).padStart(2,'0')} / ${game.items.length}`;$('itemIcon').innerHTML=item.image?`<img src="${item.image}" alt="${escapeHtml(item.title)}"><span class="emoji-layer">${escapeHtml(item.icon)}</span>`:escapeHtml(item.icon);$('itemTitle').textContent=item.title;$('itemDetail').textContent=item.detail;
+    $('bidAmount').textContent=money(game.currentBid);$('bidLabel').innerHTML=game.currentBid?`OFERTA ACTUAL<br/>${escapeHtml(game.players[game.highBidder].name).toUpperCase()}`:'OFERTA ACTUAL<br/>AÚN SIN PUJAS';
+    renderActions();$('undoBtn').disabled=undoStack.length===0||!!onlineSession;
+    $('actionArea').querySelectorAll('[data-action]').forEach(btn=>btn.addEventListener('click',()=>handleAction(btn.dataset.action)));
+  }
+  async function handleAction(action){
+    if(!game||game.phase==='finished')return;
+    if(onlineSession){const active=isSolo()?soloChooser():game.turn;if(active!==onlineSession.role)return;}
+    if(action==='newGame'){backToSetup();return;}
+    const player=game.turn;
+    if(action==='openBid'){
+      const amount=Math.floor(Number($('openAmount').value));if(!Number.isFinite(amount)||amount<1||amount>game.players[player].money){alert('Tu oferta debe ser de al menos $1 y no puede superar tu saldo.');return;}
+      snapshot();game.currentBid=amount;game.highBidder=player;game.phase='auction';game.turn=other(player);log(`<b>${escapeHtml(game.players[player].name)}</b> abre la puja por <b>${money(amount)}</b>.`);playTone(600);renderGame();
+    }else if(action==='openingPass'){
+      snapshot();game.openingPasses.push(player);if(game.openingPasses.length>=2){log(`Nadie quiso <b>${escapeHtml(currentItem().title)}</b>. Se queda fuera de la partida.`);advanceItem();}else{game.turn=other(player);log(`<b>${escapeHtml(game.players[player].name)}</b> pasa la apertura.`);}playTone(420);renderGame();
+    }else if(action==='raise'){
+      const amount=Math.floor(Number($('raiseAmount').value));if(!Number.isFinite(amount)||amount<=game.currentBid||amount>game.players[player].money){alert(`La nueva oferta debe ser mayor que ${money(game.currentBid)} y no superar tu saldo.`);return;}
+      snapshot();const previous=game.highBidder;game.currentBid=amount;game.highBidder=player;game.turn=previous;log(`<b>${escapeHtml(game.players[player].name)}</b> sube la puja a <b>${money(amount)}</b>.`);playTone(720);renderGame();
+    }else if(action==='auctionPass'){
+      snapshot();const winner=game.highBidder;assignItem(winner,game.currentBid,'buy');playTone(820,.12);renderGame();
+    }else if(action==='soloBuy'){
+      const chooser=soloChooser(),amount=Math.floor(Number($('soloAmount').value));if(!Number.isFinite(amount)||amount<1||amount>game.players[chooser].money){alert('El precio debe ser al menos $1 y no puede superar tu saldo.');return;}
+      snapshot();assignItem(chooser,amount,'buy');playTone(820,.12);renderGame();
+    }else if(action==='soloGift'){
+      const chooser=soloChooser();snapshot();assignItem(other(chooser),0,'gift');playTone(530,.12);renderGame();
+    }
+    if(onlineSession)await syncOnlineGame();
+  }
+  function undo(){if(onlineSession){alert('Deshacer está disponible en modo local. En online, cada movimiento ya queda sincronizado para ambos jugadores.');return;}if(!undoStack.length||!game)return;game=undoStack.pop();playTone(400);renderGame();}
+  function backToSetup(){if(onlineSession){exitOnlineRoom();return;}game=null;undoStack=[];$('gameScreen').classList.add('hidden');$('setupScreen').classList.remove('hidden');$('adminModal').classList.add('hidden');window.scrollTo({top:0,behavior:'smooth'});}
+  function openAdmin(){$('adminModal').classList.remove('hidden');}
+  function showRules(){alert('REGLAS DE PUJA CLUB\n\n1. Cada jugador comienza con el presupuesto configurado.\n2. La subasta abre desde $1. El jugador en turno puede pasar y dar la oportunidad al rival; si ambos pasan, el artículo se descarta.\n3. Una vez abierta, los jugadores alternan. Cada nueva oferta debe superar la anterior por al menos $1.\n4. Si un jugador pasa durante la puja, el mejor postor gana y paga su última oferta.\n5. Si alguien llega a $0, el jugador que conserva dinero decide artículo por artículo: comprarlo para sí por al menos $1 o regalárselo al rival sin coste.\n6. La partida termina cuando se agotan los artículos o ambos tienen $0.\n7. Al final, los jugadores votan quién armó la mejor creación.\n\nConsejo: no gana quien gasta más, sino quien consigue los mejores artículos con su presupuesto.');}
+
+  $('addItemBtn').addEventListener('click',()=>{draftItems.push({id:nextDraftId++,icon:'✨',title:'Nueva opción',detail:'Una oportunidad única. ¿La quieres para tu creación?',image:''});renderDraftEditor();updateCount();const inputs=$('itemsEditor').querySelectorAll('[data-field=title]');inputs[inputs.length-1]?.focus();});
+  $('restoreBtn').addEventListener('click',()=>loadPreset(selectedPreset));
+  $('shuffleBtn').addEventListener('click',()=>{for(let i=draftItems.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[draftItems[i],draftItems[j]]=[draftItems[j],draftItems[i]];}renderDraftEditor();updateCount();playTone(500);});
+  $('startBtn').addEventListener('click',startGame);
+  $('sceneEnabled').addEventListener('change',()=>{sceneEnabled=$('sceneEnabled').checked;});
+  $('sceneBgInput').addEventListener('change',async()=>{const file=$('sceneBgInput').files?.[0];if(!file)return;if(!file.type.startsWith('image/')){alert('Elige una imagen válida.');return;}if(file.size>12*1024*1024){alert('La imagen supera los 12 MB.');return;}try{sceneBgDataUrl=await compressImage(file);$('sceneBgStatus').textContent='Fondo personalizado listo';renderSetupRoom();}catch(e){alert('No se pudo leer la imagen.');}});
+  $('clearSceneBg').addEventListener('click',()=>{sceneBgDataUrl='';$('sceneBgInput').value='';$('sceneBgStatus').textContent='Escenario ilustrado incluido';renderSetupRoom();});
+  $('scenePlayerSelect').addEventListener('change',renderRoomBoard);
+  $('saveCloudConfig').addEventListener('click',loadSupabaseClient);
+  $('createRoomBtn').addEventListener('click',createOnlineRoom);
+  $('joinRoomBtn').addEventListener('click',joinOnlineRoom);
+  $('copyWaitingCode').addEventListener('click',()=>{if(onlineSession)navigator.clipboard?.writeText(onlineSession.code).then(()=>{ $('waitingStatus').textContent='Código copiado. ¡Compártelo!';}).catch(()=>alert('Código: '+onlineSession.code));});
+  $('copyHostRoomCode').addEventListener('click',()=>{if(onlineSession)navigator.clipboard?.writeText(onlineSession.code).then(()=>renderOnlineMessage('Código '+onlineSession.code+' copiado.','good')).catch(()=>alert('Código: '+onlineSession.code));});
+  $('leaveWaitingRoom').addEventListener('click',exitOnlineRoom);
+  $('soundToggle').addEventListener('click',()=>{soundOn=!soundOn;$('soundToggle').textContent=soundOn?'🔊 Sonido':'🔇 Silencio';if(soundOn)playTone();});
+  $('undoBtn').addEventListener('click',undo);$('adminBtn').addEventListener('click',openAdmin);$('modalUndo').addEventListener('click',()=>{undo();$('adminModal').classList.add('hidden');});
+  $('rulesBtn').addEventListener('click',showRules);$('newGameBtn').addEventListener('click',()=>{if(confirm('¿Terminar esta partida y volver a la configuración?'))backToSetup();});$('closeModal').addEventListener('click',()=>$('adminModal').classList.add('hidden'));
+  $('adminModal').addEventListener('click',e=>{if(e.target===$('adminModal'))$('adminModal').classList.add('hidden');});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')$('adminModal').classList.add('hidden');});
+  loadSavedCloudConfig();presetMarkup();loadPreset('gaming');renderSetupRoom();restoreSavedRoom();
+})();
+</script>
+</body>
+</html>
